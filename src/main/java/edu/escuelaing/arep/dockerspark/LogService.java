@@ -7,24 +7,21 @@ package edu.escuelaing.arep.dockerspark;
 
 import static spark.Spark.*;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.ServerApi;
-import com.mongodb.ServerApiVersion;
 import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
 
-import edu.escuelaing.arep.dockerspark.Service.impl.CadenaServiceMongoDB;
-
+import edu.escuelaing.arep.dockerspark.Connection.DBConnection;
 
 public class LogService {
 
+    public static DBConnection connection;
+
+    public static MongoClient cli;
+
 
     public static void main(String[] args) {
-
-        connecting();
-        
+        port(getPort());
+        //Conexion con base de datos
+        /** 
         System.out.println("Initializing...");
         port(getPort());
         staticFiles.location("/public");
@@ -47,25 +44,10 @@ public class LogService {
            //     MongoSpark.save
           //  });
        // });
+       */
 
     }
 
-    /**
-     * Funcion generada para generar conexion con base de datos mongoDB
-     */
-    public static void connecting(){
-        ConnectionString connectionString = new ConnectionString("mongodb+srv://admin:admin@arep-docker-taller1.z39iyuv.mongodb.net/?retryWrites=true&w=majority");
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(connectionString)
-                .serverApi(ServerApi.builder()
-                    .version(ServerApiVersion.V1)
-                    .build())
-                .build();
-        MongoClient mongoClient = MongoClients.create(settings);
-        MongoDatabase database = mongoClient.getDatabase("test");
-
-
-    }
 
 
     /**

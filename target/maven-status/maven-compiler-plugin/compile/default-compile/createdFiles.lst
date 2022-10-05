@@ -1,0 +1,3 @@
+edu\escuelaing\arep\dockerspark\LogService.class
+edu\escuelaing\arep\dockerspark\DBServices\MongoServices.class
+edu\escuelaing\arep\dockerspark\Connection\DBConnection.class

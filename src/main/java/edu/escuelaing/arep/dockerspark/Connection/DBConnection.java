@@ -18,6 +18,9 @@ public class DBConnection {
 
     public static MongoClient mongoClient;
 
+    //collecion CADENAS
+    public static MongoCollection<Document> chains;
+
 
     public static void main(String... args) {
         // Conexión a base de datos mongodb
@@ -51,6 +54,11 @@ public class DBConnection {
         MongoDatabase database = mongoClient.getDatabase("AREP-DOCKER-TALLER1");
         //Obtener objeto colección. Si no existe lo crea
         MongoCollection<Document> customers = database.getCollection("customer");
+
+        chains = database.getCollection("cadenas");
+
+
+
         
         //Obtiene un iterable
         FindIterable<Document> iterable = customers.find();
@@ -63,15 +71,15 @@ public class DBConnection {
         
         
         //Crea un documento BSON con el cliente
-        Document customer = new Document("_id", new ObjectId());
-        customer.append("firstName", "Daniel");
-        customer.append("lastName", "Benavides");
-        customer.append("_class", "co.edu.escuelaing.mongodemo.Customer.Customer");
+        //Document customer = new Document("_id", new ObjectId());
+        //customer.append("firstName", "Daniel");
+        //customer.append("lastName", "Benavides");
+        //customer.append("_class", "co.edu.escuelaing.mongodemo.Customer.Customer");
 
  
 
         //Agrega el nuevo cliente a la colección
-        customers.insertOne(customer);
+        //customers.insertOne(customer);
 
  
 
@@ -80,7 +88,14 @@ public class DBConnection {
             System.out.println(d);
         }
 
- 
+    }
+
+    /**
+     * Funcion generada para insertar una nueva cadena dentro de la coleccion CADENAS
+     * @param newChain
+     */
+    public void insertIntoDB(Document newChain){
+        chains.insertOne(newChain);
 
     }
  

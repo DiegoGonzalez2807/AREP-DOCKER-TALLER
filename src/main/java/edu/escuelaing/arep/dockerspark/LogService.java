@@ -15,16 +15,12 @@ public class LogService {
 
     public static DBConnection connection;
 
-    public static MongoClient cli;
-
 
     public static void main(String[] args) {
         port(getPort());
         //Conexion con base de datos
-        /** 
         System.out.println("Initializing...");
-        port(getPort());
-        staticFiles.location("/public");
+        //staticFiles.location("/public");
 
         //Primer PATH, se encarga de la redireccion a la pagina principal
         get("/inicio", (req, res) -> {
@@ -36,15 +32,20 @@ public class LogService {
             res.redirect("/index.html");
             return null;
         });
+        get("/insert/:cadenaValue", (req, res) -> {
+            res.status(200);
+            res.header("Access-Control-Allow-Origin", "*");
+            System.out.println(req.params(":cadenaValue"));
+            DBConnection.connect();
+            DBConnection.insertIntoDB(req.params(":cadenaValue"));
+
+            //System.out.println(connection.createDocumentChain(req.params(":cadenaValue")));
+            //System.out.println(connection.createDocumentChain(req.params(":cadenaValue")));
+            return null;
+        });
 
         //Segundo path -> Se encarga de enviar la cadena para poder ingresarla a
         //la base de datos MONGO
-        //path("/insert",()->{
-         //   get("/:cadenaValue", (req,res)->{
-           //     MongoSpark.save
-          //  });
-       // });
-       */
 
     }
 

@@ -15,16 +15,21 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+
+import static com.mongodb.client.model.Aggregates.limit;
+import static com.mongodb.client.model.Sorts.*;
 
 public class DBConnection {
 
     public static MongoClient mongoClient;
+
     public static void connect() {
         // Conexión a base de datos mongodb
 
         //URL para Atlasdb en la nube
-        String connstr ="mongodb+srv://admin:admin@arep-docker-taller1.z39iyuv.mongodb.net/?retryWrites=true&w=majority";
+        String connstr = "mongodb+srv://admin:admin@arep-docker-taller1.z39iyuv.mongodb.net/?retryWrites=true&w=majority";
 
         //URL para conexión local
         //String connstr ="mongodb://localhost:40000/?retryWrites=true&w=majority";
@@ -48,7 +53,7 @@ public class DBConnection {
     /**
      * Funcion generada para insertar valores de la cadena dentro de la base de datos Atlas
      */
-    public static void insertIntoDB(String valueChain){
+    public static void insertIntoDB(String valueChain) {
         MongoDatabase database = mongoClient.getDatabase("AREP-DOCKER-TALLER1");
         MongoCollection<Document> chains = database.getCollection("cadenas");
 
@@ -59,7 +64,21 @@ public class DBConnection {
 
         //Agrega el nuevo cliente a la colección
         chains.insertOne(chain);
+
+        //Creacion del orden de la coleccion
+        Bson orderBySort = orderBy(descending("createdAt"));
+        //Impresion de cadenas
+        printChains(chains,orderBySort);
     }
 
-
+    /**
+     * Funcion generada para imprimir los ultimos 10 registros de la coleccion cadenas
+     * @param chains
+     */
+    public static void printChains(MongoCollection<Document> chains,Bson ordeBySort){
+        FindIterable<Document> iterable = chains.find().sort(ordeBySort).limit(10);
+        for (Document d : iterable) {
+            System.out.println(d);
+        }
+    }
 }

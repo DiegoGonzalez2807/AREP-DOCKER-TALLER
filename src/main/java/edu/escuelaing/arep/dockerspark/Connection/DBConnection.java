@@ -1,4 +1,6 @@
 package edu.escuelaing.arep.dockerspark.Connection;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerApi;
@@ -7,18 +9,14 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import static com.mongodb.client.model.Aggregates.limit;
 import static com.mongodb.client.model.Sorts.*;
 
 public class DBConnection {
@@ -51,9 +49,12 @@ public class DBConnection {
     }
 
     /**
-     * Funcion generada para insertar valores de la cadena dentro de la base de datos Atlas
+     * Funcion encargada de ingresar el valor de la cadena a la base de datos
+     * retorna un JSON con los ultimos 10 valores de 
+     * @param valueChain
+     * @return
      */
-    public static void insertIntoDB(String valueChain) {
+    public static String insertIntoDB(String valueChain) {
         MongoDatabase database = mongoClient.getDatabase("AREP-DOCKER-TALLER1");
         MongoCollection<Document> chains = database.getCollection("cadenas");
 
@@ -64,21 +65,27 @@ public class DBConnection {
 
         //Agrega el nuevo cliente a la colección
         chains.insertOne(chain);
-
+        System.out.println("SE SUPONE ESTO ES TODO LO DE CHAINS");
+        System.out.println(chains.find());
         //Creacion del orden de la coleccion
         Bson orderBySort = orderBy(descending("createdAt"));
-        //Impresion de cadenas
-        printChains(chains,orderBySort);
+
+        //Creacion de JSON
+        Gson gson=new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(printChains(chains, orderBySort));
     }
 
     /**
      * Funcion generada para imprimir los ultimos 10 registros de la coleccion cadenas
      * @param chains
      */
-    public static void printChains(MongoCollection<Document> chains,Bson ordeBySort){
+    public static ArrayList<Document> printChains(MongoCollection<Document> chains,Bson ordeBySort){
+        ArrayList<Document> jsonObjects = new ArrayList<>();
         FindIterable<Document> iterable = chains.find().sort(ordeBySort).limit(10);
         for (Document d : iterable) {
             System.out.println(d);
+            jsonObjects.add(d);
         }
+        return jsonObjects;
     }
 }

@@ -9,7 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <exec.mainClass>edu.escuelaing.arep.dockerspark.LogService</exec.mainClass>
+        <exec.mainClass>edu.escuelaing.arep.dockerspark.Server.LogService</exec.mainClass>
     </properties>
 
 
@@ -71,9 +71,10 @@
             <artifactId>mongo-java-driver</artifactId>
             <version>3.10.2</version>
         </dependency>
-
-
-
-
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.9</version>
+        </dependency>
     </dependencies>
 </project>

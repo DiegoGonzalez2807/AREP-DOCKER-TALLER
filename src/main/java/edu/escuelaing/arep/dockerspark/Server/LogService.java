@@ -3,24 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
  */
 
-package edu.escuelaing.arep.dockerspark;
+package edu.escuelaing.arep.dockerspark.Server;
 
 import static spark.Spark.*;
 
-import com.mongodb.client.MongoClient;
-
 import edu.escuelaing.arep.dockerspark.Connection.DBConnection;
 
+
+import java.io.IOException;
+
+
 public class LogService {
-
-    public static DBConnection connection;
-
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         port(getPort());
         //Conexion con base de datos
+        staticFiles.location("/public");
         System.out.println("Initializing...");
-        //staticFiles.location("/public");
 
         //Primer PATH, se encarga de la redireccion a la pagina principal
         get("/inicio", (req, res) -> {
@@ -32,31 +30,21 @@ public class LogService {
             res.redirect("/index.html");
             return null;
         });
+        //Path encargado de retornar las 10 ultimas cadenas insertadas en la coleccion
         get("/insert/:cadenaValue", (req, res) -> {
             res.status(200);
             res.header("Access-Control-Allow-Origin", "*");
-            System.out.println(req.params(":cadenaValue"));
             DBConnection.connect();
-            DBConnection.insertIntoDB(req.params(":cadenaValue"));
-
-            //System.out.println(connection.createDocumentChain(req.params(":cadenaValue")));
-            //System.out.println(connection.createDocumentChain(req.params(":cadenaValue")));
-            return null;
+            return DBConnection.insertIntoDB(req.params(":cadenaValue"));
         });
-
-        //Segundo path -> Se encarga de enviar la cadena para poder ingresarla a
-        //la base de datos MONGO
-
     }
-
-
 
     /**
      * Funcion generada para generar un puerto por defecto
      * para conectarse a la aplicacion web
      * @return
      */
-    static int getPort() {
+    public static int getPort() {
         if (System.getenv("PORT") != null) {
             return Integer.parseInt(System.getenv("PORT"));
         }

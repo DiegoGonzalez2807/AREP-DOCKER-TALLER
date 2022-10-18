@@ -1,10 +1,11 @@
 package edu.escuelaing.arep.dockerspark.Connection;
+
+import com.mongodb.ServerApi;
+import com.mongodb.ServerApiVersion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.ServerApi;
-import com.mongodb.ServerApiVersion;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
